@@ -1,6 +1,7 @@
 {
   "name": "react-pokedex",
   "version": "0.1.0",
+  "homepage": "https://pokemon.tabermcfarlin.com",
   "private": true,
   "dependencies": {
     "react": "^16.5.2",
@@ -12,7 +13,9 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "predeploy": "npm run build; echo pokemon.tabermcfarlin.com > build/CNAME",
+    "deploy": "gh-pages -b master -d build"
   },
   "devDependencies": {
     "@types/jest": "^23.3.3",
