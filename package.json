@@ -1,7 +1,7 @@
 {
   "name": "react-pokedex",
-  "version": "0.1.0",
   "homepage": "https://pokemon.tabermcfarlin.com",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "react": "^16.5.2",
