@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link, Route, Switch } from "react-router-dom";
+import Pokemon from "./pages/Pokemon";
 import Root from "./pages/Root";
 
 class App extends React.Component {
@@ -17,6 +18,7 @@ class App extends React.Component {
 
         <Switch>
           <Route exact={true} path="/" component={Root} />
+          <Route path="/pokemon/page/" component={Pokemon} />
         </Switch>
       </div>
     );
