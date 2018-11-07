@@ -1,7 +1,31 @@
 import * as React from "react";
 import { Link, Route, Switch } from "react-router-dom";
-import Pokemon from "./pages/Pokemon";
+import Pagination from "./pages/Pagination";
 import Root from "./pages/Root";
+
+const pokemonPagination = () => (
+  <Pagination
+    limit={20}
+    apiURL="https://pokeapi.co/api/v2/"
+    apiCategory="pokemon"
+  />
+);
+
+const berriesPagination = () => (
+  <Pagination
+    limit={20}
+    apiURL="https://pokeapi.co/api/v2/"
+    apiCategory="berry"
+  />
+);
+
+const machinesPagination = () => (
+  <Pagination
+    limit={20}
+    apiURL="https://pokeapi.co/api/v2/"
+    apiCategory="machine"
+  />
+);
 
 class App extends React.Component {
   public render() {
@@ -18,7 +42,9 @@ class App extends React.Component {
 
         <Switch>
           <Route exact={true} path="/" component={Root} />
-          <Route path="/pokemon/page/" component={Pokemon} />
+          <Route path="/pokemon/page/" render={pokemonPagination} />
+          <Route path="/berries/page/" render={berriesPagination} />
+          <Route path="/machines/page/" render={machinesPagination} />
         </Switch>
       </div>
     );

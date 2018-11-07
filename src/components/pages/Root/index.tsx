@@ -31,7 +31,7 @@ class Root extends React.Component {
           description="Technical Machines (TMs) and Hidden Machines (HMs) are machines that
           are used to teach Pokémon new abilities or 'moves'. These moves can
           be used in battle or in the outside world to aid your journey."
-          page="berries"
+          page="machines"
         />
       </main>
     );

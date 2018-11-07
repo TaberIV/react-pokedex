@@ -3,33 +3,47 @@ import * as React from "react";
 import ReactPaginate from "react-paginate";
 import { NavLink } from "react-router-dom";
 
-type apiList = Array<{ name: string; url: string }>;
+interface IApiItem {
+  name?: string;
+  url: string;
+}
 
-class Pokemon extends React.Component<{}, { offset: number; data: apiList }> {
-  private limit = 20;
+interface IPaginationProps {
+  limit: number;
+  apiURL: string;
+  apiCategory: string;
+}
 
-  constructor(props: {}) {
+interface IPaginationState {
+  offset: number;
+  data: IApiItem[];
+}
+
+class Pagination extends React.Component<IPaginationProps, IPaginationState> {
+  private apiURL: string;
+
+  constructor(props: IPaginationProps) {
     super(props);
 
     this.state = { offset: 0, data: [] };
+
+    this.apiURL = this.props.apiURL + this.props.apiCategory + "/";
   }
 
   public async loadAPI() {
-    const url = "https://pokeapi.co/api/v2/pokemon/";
-
-    const { data } = await axios.get(url);
-    const results: apiList = data.results;
+    const { data } = await axios.get(this.apiURL);
+    const results: IApiItem[] = data.results;
     results.splice(802, 1000);
 
     const { offset } = this.state;
     this.setState({
-      data: results.slice(offset, offset + this.limit)
+      data: results.slice(offset, offset + this.props.limit)
     });
   }
 
   public handlePageClick = (data: any) => {
     const selected = data.selected;
-    const offset = Math.ceil(selected * this.limit);
+    const offset = Math.ceil(selected * this.props.limit);
 
     this.setState({ offset }, () => {
       this.loadAPI();
@@ -43,14 +57,18 @@ class Pokemon extends React.Component<{}, { offset: number; data: apiList }> {
   public render() {
     const { offset } = this.state;
 
-    const list = this.state.data.map((pokemon, i) => {
+    const list = this.state.data.map((item, i) => {
       const num = i + offset + 1;
-      const capName =
-        pokemon.name.charAt(0).toUpperCase() + pokemon.name.substring(1);
+
+      const name = item.name
+        ? item.name.charAt(0).toUpperCase() + item.name.substring(1)
+        : `Machine ${num}`;
 
       return (
-        <li key={pokemon.name}>
-          <NavLink to={`/pokemon/${num}`}>{capName}</NavLink>
+        <li key={item.name}>
+          <NavLink to={`/${this.props.apiCategory}/${num}`}>{name}</NavLink>
+          <br />
+          <a href={`${this.apiURL}/${num}`}>{name}</a>
         </li>
       );
     });
@@ -76,4 +94,4 @@ class Pokemon extends React.Component<{}, { offset: number; data: apiList }> {
   }
 }
 
-export default Pokemon;
+export default Pagination;
