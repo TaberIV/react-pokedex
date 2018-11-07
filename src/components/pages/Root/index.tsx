@@ -11,18 +11,18 @@ class Root extends React.Component {
         </p>
 
         <Description
-          title="Berries"
-          description="Berries are snacks for Pokémon. These berries will have various
-            effects like healing the Pokémon, curing them of status ailments, or
-            boosting their abilities!"
+          title="Pokémon"
+          description="Pokémon are fantastic creatures with special powers and
+             abilities. Some people keep Pokémon as pets, and others battle them
+             to become Pokémon masters."
           page="pokemon"
         />
 
         <Description
-          title="Pokémon"
-          description="Pokémon are fantastic creatures with special powers and
-           abilities. Some people keep Pokémon as pets, and others battle them
-           to become Pokémon masters."
+          title="Berries"
+          description="Berries are snacks for Pokémon. These berries will have various
+            effects like healing the Pokémon, curing them of status ailments, or
+            boosting their abilities!"
           page="berries"
         />
 
