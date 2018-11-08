@@ -1,29 +1,37 @@
 import * as React from "react";
 import { Link, Route, Switch } from "react-router-dom";
-import Pagination from "./pages/Pagination";
+import ItemPage from "./pages/ItemPage";
+import NotFound from "./pages/NotFound";
+import Pagination, { paginationRouteProps } from "./pages/Pagination";
 import Root from "./pages/Root";
 
-const pokemonPagination = () => (
+const limit = 20;
+const apiURL = "https://pokeapi.co/api/v2/";
+
+const pokemonPagination = (routeProps: paginationRouteProps) => (
   <Pagination
-    limit={20}
-    apiURL="https://pokeapi.co/api/v2/"
+    limit={limit}
+    apiURL={apiURL}
     apiCategory="pokemon"
+    routeProps={routeProps}
   />
 );
 
-const berriesPagination = () => (
+const berriesPagination = (routeProps: paginationRouteProps) => (
   <Pagination
-    limit={20}
-    apiURL="https://pokeapi.co/api/v2/"
+    limit={limit}
+    apiURL={apiURL}
     apiCategory="berry"
+    routeProps={routeProps}
   />
 );
 
-const machinesPagination = () => (
+const machinesPagination = (routeProps: paginationRouteProps) => (
   <Pagination
-    limit={20}
-    apiURL="https://pokeapi.co/api/v2/"
+    limit={limit}
+    apiURL={apiURL}
     apiCategory="machine"
+    routeProps={routeProps}
   />
 );
 
@@ -42,9 +50,11 @@ class App extends React.Component {
 
         <Switch>
           <Route exact={true} path="/" component={Root} />
-          <Route path="/pokemon/page/" render={pokemonPagination} />
-          <Route path="/berries/page/" render={berriesPagination} />
-          <Route path="/machines/page/" render={machinesPagination} />
+          <Route path="/pokemon/page/:page" render={pokemonPagination} />
+          <Route path="/berry/page/:page" render={berriesPagination} />
+          <Route path="/machine/page/:page" render={machinesPagination} />
+          <Route path="/pokemon/:id" component={ItemPage} />
+          <Route component={NotFound} />
         </Switch>
       </div>
     );

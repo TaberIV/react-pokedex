@@ -1,7 +1,7 @@
-import axios from "axios";
+import Axios from "axios";
 import * as React from "react";
 import ReactPaginate from "react-paginate";
-import { NavLink } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 
 interface IApiItem {
   name?: string;
@@ -12,30 +12,39 @@ interface IPaginationProps {
   limit: number;
   apiURL: string;
   apiCategory: string;
+  routeProps: RouteComponentProps<{ page: string }>;
 }
 
 interface IPaginationState {
-  offset: number;
+  page: number;
   data: IApiItem[];
 }
 
+function capitalizeFirstLetter(str: string): string {
+  return str.charAt(0).toUpperCase() + str.substring(1);
+}
+
+export type paginationRouteProps = RouteComponentProps<{ page: string }>;
+
 class Pagination extends React.Component<IPaginationProps, IPaginationState> {
   private apiURL: string;
+  private count: number;
 
   constructor(props: IPaginationProps) {
     super(props);
 
-    this.state = { offset: 0, data: [] };
+    const page = Number(this.props.routeProps.match.params.page);
+    this.state = { page, data: [] };
 
     this.apiURL = this.props.apiURL + this.props.apiCategory + "/";
   }
 
   public async loadAPI() {
-    const { data } = await axios.get(this.apiURL);
+    const { data } = await Axios.get(this.apiURL);
     const results: IApiItem[] = data.results;
-    results.splice(802, 1000);
+    this.count = data.count;
 
-    const { offset } = this.state;
+    const offset = this.state.page * this.props.limit;
     this.setState({
       data: results.slice(offset, offset + this.props.limit)
     });
@@ -43,11 +52,13 @@ class Pagination extends React.Component<IPaginationProps, IPaginationState> {
 
   public handlePageClick = (data: any) => {
     const selected = data.selected;
-    const offset = Math.ceil(selected * this.props.limit);
+    const page = selected;
 
-    this.setState({ offset }, () => {
-      this.loadAPI();
-    });
+    const category = this.props.apiCategory;
+    const { history } = this.props.routeProps;
+    history.push(`/${category}/page/${page}`);
+
+    this.setState({ page }, () => this.loadAPI());
   };
 
   public componentDidMount() {
@@ -55,41 +66,45 @@ class Pagination extends React.Component<IPaginationProps, IPaginationState> {
   }
 
   public render() {
-    const { offset } = this.state;
+    const { page, data } = this.state;
+    const { limit, apiCategory } = this.props;
 
-    const list = this.state.data.map((item, i) => {
+    const offset = page * limit;
+
+    const list = data.map((item, i) => {
       const num = i + offset + 1;
 
       const name = item.name
-        ? item.name.charAt(0).toUpperCase() + item.name.substring(1)
+        ? capitalizeFirstLetter(item.name)
         : `Machine ${num}`;
 
       return (
-        <li key={item.name}>
-          <NavLink to={`/${this.props.apiCategory}/${num}`}>{name}</NavLink>
-          <br />
-          <a href={`${this.apiURL}/${num}`}>{name}</a>
+        <li key={name}>
+          <Link to={`/${apiCategory}/${num}`}>{name}</Link>
         </li>
       );
     });
 
+    const pageCount = Math.ceil(this.count / limit);
     return (
-      <div>
+      <main>
+        <header>
+          <h2>{capitalizeFirstLetter(apiCategory)}</h2>
+        </header>
+
         <ol start={offset + 1}>{list}</ol>
 
         <ReactPaginate
-          previousLabel={"previous"}
-          nextLabel={"next"}
-          breakLabel={<a href="">...</a>}
-          breakClassName={"break-me"}
-          pageCount={41}
+          forcePage={page}
+          previousLabel={page > 0 ? "Previous" : ""}
+          nextLabel={page < pageCount - 1 ? "Next" : ""}
+          pageCount={pageCount}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={this.handlePageClick}
-          containerClassName={"pagination"}
           activeClassName={"active"}
         />
-      </div>
+      </main>
     );
   }
 }

@@ -23,7 +23,7 @@ class Root extends React.Component {
           description="Berries are snacks for Pokémon. These berries will have various
             effects like healing the Pokémon, curing them of status ailments, or
             boosting their abilities!"
-          page="berries"
+          page="berry"
         />
 
         <Description
@@ -31,7 +31,7 @@ class Root extends React.Component {
           description="Technical Machines (TMs) and Hidden Machines (HMs) are machines that
           are used to teach Pokémon new abilities or 'moves'. These moves can
           be used in battle or in the outside world to aid your journey."
-          page="machines"
+          page="machine"
         />
       </main>
     );
