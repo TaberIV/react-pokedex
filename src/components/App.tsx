@@ -1,6 +1,9 @@
 import * as React from "react";
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, RouteComponentProps, Switch } from "react-router-dom";
 import ItemPage from "./pages/ItemPage";
+import BerryPage from "./pages/ItemPage/pages/BerryPage";
+import MachinePage from "./pages/ItemPage/pages/MachinePage";
+import PokemonPage from "./pages/ItemPage/pages/PokemonPage";
 import NotFound from "./pages/NotFound";
 import Pagination, { paginationRouteProps } from "./pages/Pagination";
 import Root from "./pages/Root";
@@ -35,6 +38,18 @@ const machinesPagination = (routeProps: paginationRouteProps) => (
   />
 );
 
+const pokemonPage = (routeProps: RouteComponentProps<{ id: string }>) => (
+  <ItemPage apiCategory="pokemon" routeProps={routeProps} page={PokemonPage} />
+);
+
+const berryPage = (routeProps: RouteComponentProps<{ id: string }>) => (
+  <ItemPage apiCategory="berry" routeProps={routeProps} page={BerryPage} />
+);
+
+const machinePage = (routeProps: RouteComponentProps<{ id: string }>) => (
+  <ItemPage apiCategory="machine" routeProps={routeProps} page={MachinePage} />
+);
+
 class App extends React.Component {
   public render() {
     const logo = "/images/Pokeball.png";
@@ -53,7 +68,9 @@ class App extends React.Component {
           <Route path="/pokemon/page/:page" render={pokemonPagination} />
           <Route path="/berry/page/:page" render={berriesPagination} />
           <Route path="/machine/page/:page" render={machinesPagination} />
-          <Route path="/pokemon/:id" component={ItemPage} />
+          <Route path="/pokemon/:id" render={pokemonPage} />
+          <Route path="/berry/:id" render={berryPage} />
+          <Route path="/machine/:id" render={machinePage} />
           <Route component={NotFound} />
         </Switch>
       </div>

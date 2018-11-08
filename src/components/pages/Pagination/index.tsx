@@ -2,6 +2,7 @@ import Axios from "axios";
 import * as React from "react";
 import ReactPaginate from "react-paginate";
 import { Link, RouteComponentProps } from "react-router-dom";
+import { formatName } from "src/util";
 
 interface IApiItem {
   name?: string;
@@ -18,10 +19,6 @@ interface IPaginationProps {
 interface IPaginationState {
   page: number;
   data: IApiItem[];
-}
-
-function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.substring(1);
 }
 
 export type paginationRouteProps = RouteComponentProps<{ page: string }>;
@@ -74,9 +71,7 @@ class Pagination extends React.Component<IPaginationProps, IPaginationState> {
     const list = data.map((item, i) => {
       const num = i + offset + 1;
 
-      const name = item.name
-        ? capitalizeFirstLetter(item.name)
-        : `Machine ${num}`;
+      const name = item.name ? formatName(item.name) : `Machine ${num}`;
 
       return (
         <li key={name}>
@@ -89,7 +84,7 @@ class Pagination extends React.Component<IPaginationProps, IPaginationState> {
     return (
       <main>
         <header>
-          <h2>{capitalizeFirstLetter(apiCategory)}</h2>
+          <h2>{formatName(apiCategory)}</h2>
         </header>
 
         <ol start={offset + 1}>{list}</ol>
